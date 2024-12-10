@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "scripts": {
+    "db:init:local": "tsx scripts/init-dev-db.ts",
+    "db:migrate:local": "tsx scripts/init-dev-db.ts"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.146",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "pg": "^8.13.1",
+    "sst": "3.3.59"
+  }
+}
