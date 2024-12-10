@@ -8,5 +8,11 @@ export default $config({
       home: "aws",
     };
   },
-  async run() {},
+  async run() {
+    const infra = await import("./infra");
+
+    return {
+      api: infra.apiGateway.url,
+    };
+  },
 });
