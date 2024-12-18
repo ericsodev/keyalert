@@ -2,10 +2,6 @@
   "$schema": "https://json.schemastore.org/package.json",
   "scripts": {
     "db:init:local": "tsx scripts/init-dev-db.ts",
-    "dev": "sst dev --stage staging",
-    "sst:destroy:staging": "sst remove --stage staging",
-    "sst:destroy:production": "sst remove --stage production",
-    "sst:deploy:production": "sst deploy --stage production",
     "db:migrate:make": "kysely migrate:make --cwd ./db",
     "db:migrate": "kysely migrate:latest --cwd ./db",
     "db:migrate:rollback": "kysely migrate:rollback --cwd ./db --all"
@@ -13,13 +9,13 @@
   "devDependencies": {
     "@types/aws-lambda": "8.10.146",
     "@types/pg": "^8.11.10",
+    "aws-cdk": "^2.172.0",
     "kysely-ctl": "^0.9.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
   "dependencies": {
     "kysely": "^0.27.5",
-    "pg": "^8.13.1",
-    "sst": "3.3.59"
+    "pg": "^8.13.1"
   }
 }

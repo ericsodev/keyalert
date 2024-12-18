@@ -8,15 +8,18 @@ importers:
 
   .:
     dependencies:
+      aws-cdk-lib:
+        specifier: ^2.172.0
+        version: 2.172.0(constructs@10.4.2)
+      constructs:
+        specifier: ^10.4.2
+        version: 10.4.2
       kysely:
         specifier: ^0.27.5
         version: 0.27.5
       pg:
         specifier: ^8.13.1
         version: 8.13.1
-      sst:
-        specifier: 3.3.59
-        version: 3.3.59
     devDependencies:
       '@types/aws-lambda':
         specifier: 8.10.146
@@ -24,6 +27,9 @@ importers:
       '@types/pg':
         specifier: ^8.11.10
         version: 8.11.10
+      aws-cdk:
+        specifier: ^2.172.0
+        version: 2.172.0
       kysely-ctl:
         specifier: ^0.9.0
         version: 0.9.0(kysely@0.27.5)
@@ -35,6 +41,21 @@ importers:
         version: 5.7.2
 
 packages:
+
+  '@aws-cdk/asset-awscli-v1@2.2.214':
+    resolution: {integrity: sha512-JeuX1xoYWXEeFD4RyAyvv8OD/NPdbLD6leKKpFLECWqsKY1YrwX0U8lr753CskflwaDGpU42pyyjPdiMZ7NiWA==}
+
+  '@aws-cdk/asset-kubectl-v20@2.1.3':
+    resolution: {integrity: sha512-cDG1w3ieM6eOT9mTefRuTypk95+oyD7P5X/wRltwmYxU7nZc3+076YEVS6vrjDKr3ADYbfn0lDKpfB1FBtO9CQ==}
+
+  '@aws-cdk/asset-node-proxy-agent-v6@2.1.0':
+    resolution: {integrity: sha512-7bY3J8GCVxLupn/kNmpPc5VJz8grx+4RKfnnJiO1LG+uxkZfANZG3RMHhE+qQxxwkyQ9/MfPtTpf748UhR425A==}
+
+  '@aws-cdk/cloud-assembly-schema@38.0.1':
+    resolution: {integrity: sha512-KvPe+NMWAulfNVwY7jenFhzhuLhLqJ/OPy5jx7wUstbjnYnjRVLpUHPU3yCjXFE0J8cuJVdx95BJ4rOs66Pi9w==}
+    bundledDependencies:
+      - jsonschema
+      - semver
 
   '@esbuild/aix-ppc64@0.23.1':
     resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
@@ -198,8 +219,28 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
-  aws4fetch@1.0.20:
-    resolution: {integrity: sha512-/djoAN709iY65ETD6LKCtyyEI04XIBP5xVvfmNxsEP0uJB5tyaGBztSryRr4HqMStr9R06PisQE7m9zDTXKu6g==}
+  aws-cdk-lib@2.172.0:
+    resolution: {integrity: sha512-SbFn2FyKhsHQpS7M3qeMWnRKtBHELkY3rmejk07cPlJ/BCJk/af8eKyeiNEEB0AZSfIeP4ImZCLNy9JS34mlPw==}
+    engines: {node: '>= 14.15.0'}
+    peerDependencies:
+      constructs: ^10.0.0
+    bundledDependencies:
+      - '@balena/dockerignore'
+      - case
+      - fs-extra
+      - ignore
+      - jsonschema
+      - minimatch
+      - punycode
+      - semver
+      - table
+      - yaml
+      - mime-types
+
+  aws-cdk@2.172.0:
+    resolution: {integrity: sha512-kacztcAl12F6zlBqKCuzCZmj4vrbMhzgDAxBB4T7fXR2amQyuu6W0nWcGWWvASXeBJcw2DJ6ulpfV4wuc9dksw==}
+    engines: {node: '>= 14.15.0'}
+    hasBin: true
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -235,6 +276,9 @@ packages:
     resolution: {integrity: sha512-I5qxpzLv+sJhTVEoLYNcTW+bThDCPsit0vLNKShZx6rLtpilNpmmeTPaeqJb9ZE9dV3DGaeby6Vuhrw38WjeyQ==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
+  constructs@10.4.2:
+    resolution: {integrity: sha512-wsNxBlAott2qg8Zv87q3eYZYgheb9lchtBfjHzzLHtXbttwSrHPs1NNQbBrmbb1YZvYg2+Vh0Dor76w4mFxJkA==}
+
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
@@ -265,6 +309,11 @@ packages:
   fs-minipass@2.1.0:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
     engines: {node: '>= 8'}
+
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -317,12 +366,6 @@ packages:
     resolution: {integrity: sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==}
     hasBin: true
 
-  jose@4.15.9:
-    resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
-
-  jose@5.2.3:
-    resolution: {integrity: sha512-KUXdbctm1uHVL8BYhnyHkgp3zDX5KW8ZhAKVFEfUbU2P8Alpzjb+48hHvjOdQIyPshoblhzsuqOwEEAbtHVirA==}
-
   kysely-ctl@0.9.0:
     resolution: {integrity: sha512-Ek4u/4vXV1nATw/RFXMuG6g76nXcD2f5RSMX/n2lbYDh1sJ53wp7QVYbxuLJwEmfHtLXlQFpDe5xPV2URxs+wg==}
     engines: {node: '>=18'}
@@ -337,10 +380,6 @@ packages:
   kysely@0.27.5:
     resolution: {integrity: sha512-s7hZHcQeSNKpzCkHRm8yA+0JPLjncSWnjb+2TIElwS2JAqYr+Kv3Ess+9KFfJS0C1xcQ1i9NkNHpWwCYpHMWsA==}
     engines: {node: '>=14.0.0'}
-
-  lru-cache@6.0.0:
-    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
-    engines: {node: '>=10'}
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -385,10 +424,6 @@ packages:
     engines: {node: ^14.16.0 || >=16.10.0}
     hasBin: true
 
-  object-hash@2.2.0:
-    resolution: {integrity: sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==}
-    engines: {node: '>= 6'}
-
   obuf@1.1.2:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
 
@@ -398,16 +433,9 @@ packages:
   ohash@1.1.4:
     resolution: {integrity: sha512-FlDryZAahJmEF3VR3w1KogSEdWX3WhA5GPakFx4J81kEAiHyLMpdLLElS8n8dfNadMgAne/MywcvmogzscVt4g==}
 
-  oidc-token-hash@5.0.3:
-    resolution: {integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==}
-    engines: {node: ^10.13.0 || >=12.0.0}
-
   onetime@6.0.0:
     resolution: {integrity: sha512-1FlR+gjXK7X+AsAHso35MnyN5KqGwJRi/31ft6x0M194ht7S+rWAvd7PHss9xSKMzE0asv1pyIHaJYq+BbacAQ==}
     engines: {node: '>=12'}
-
-  openid-client@5.6.4:
-    resolution: {integrity: sha512-T1h3B10BRPKfcObdBklX639tVz+xh34O7GjofqrqiAQdm7eHsQ00ih18x6wuJ/E6FxdtS2u3FmUGPDeEcMwzNA==}
 
   path-key@3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
@@ -533,43 +561,6 @@ packages:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
     engines: {node: '>= 10.x'}
 
-  sst-darwin-arm64@3.3.59:
-    resolution: {integrity: sha512-v8E3pg3JK7LDFOD0ot5N+HMNOA6MDHczx1M1SsJnMcNZPLTFH/Dn1B3roUaTP55+8jLKtqSJhnp9kLtTPHR1GQ==}
-    cpu: [arm64]
-    os: [darwin]
-
-  sst-darwin-x64@3.3.59:
-    resolution: {integrity: sha512-SOOvHPxdxXwcMEwfdDXFiaMqZTdy1UcTL74omKGAn3i0pdoDN+FK2KPa865gNd1dzyYg0P6QXcUu9hI92g9Cyg==}
-    cpu: [x64]
-    os: [darwin]
-
-  sst-linux-arm64@3.3.59:
-    resolution: {integrity: sha512-C7RjmuO0RR6xhmz0EZDcL6FhPCInwj5odehJZkbrvW0SObdoBLZLeDF0Or/7DKKh9VuSes/dpN1UvuUtMVE5Cg==}
-    cpu: [arm64]
-    os: [linux]
-
-  sst-linux-x64@3.3.59:
-    resolution: {integrity: sha512-7XZaYHl7Uun9q6koMEIICvw/+BX18hqiVmBjaC2p6J6x5tw+z7kfpK3x+yD26HLHoFNhpIBLb+6Nqj7XDyCa/Q==}
-    cpu: [x64]
-    os: [linux]
-
-  sst-linux-x86@3.3.59:
-    resolution: {integrity: sha512-GA8dZw6ty12ZwvpdVXkKBtdNwNuGF8vIcOKSzAQ6eC2UmywHlvQNgz2fiWMPVz94QLnNHCHAZlL6XAR7fz7n4Q==}
-    cpu: [x86]
-    os: [linux]
-
-  sst@3.3.59:
-    resolution: {integrity: sha512-WzKYWMf41n/TMEVp54tEITvmZQ0iZHf2whevpqqS85dAGP6w74NbEkwPNAB5oU2RlA2sj8GgMF76NdctsYQ0JA==}
-    hasBin: true
-    peerDependencies:
-      hono: 4.x
-      valibot: 0.30.x
-    peerDependenciesMeta:
-      hono:
-        optional: true
-      valibot:
-        optional: true
-
   std-env@3.8.0:
     resolution: {integrity: sha512-Bc3YwwCB+OzldMxOXJIIvC6cPRWr/LxOp48CdQTOkPyk/t4JWWJbrilwBd7RJzKV8QW7tJkcgAmeuLLJugl5/w==}
 
@@ -614,6 +605,14 @@ packages:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
 
 snapshots:
+
+  '@aws-cdk/asset-awscli-v1@2.2.214': {}
+
+  '@aws-cdk/asset-kubectl-v20@2.1.3': {}
+
+  '@aws-cdk/asset-node-proxy-agent-v6@2.1.0': {}
+
+  '@aws-cdk/cloud-assembly-schema@38.0.1': {}
 
   '@esbuild/aix-ppc64@0.23.1':
     optional: true
@@ -706,7 +705,17 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  aws4fetch@1.0.20: {}
+  aws-cdk-lib@2.172.0(constructs@10.4.2):
+    dependencies:
+      '@aws-cdk/asset-awscli-v1': 2.2.214
+      '@aws-cdk/asset-kubectl-v20': 2.1.3
+      '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
+      '@aws-cdk/cloud-assembly-schema': 38.0.1
+      constructs: 10.4.2
+
+  aws-cdk@2.172.0:
+    optionalDependencies:
+      fsevents: 2.3.2
 
   binary-extensions@2.3.0: {}
 
@@ -750,6 +759,8 @@ snapshots:
   confbox@0.1.8: {}
 
   consola@3.2.3: {}
+
+  constructs@10.4.2: {}
 
   cross-spawn@7.0.6:
     dependencies:
@@ -810,6 +821,9 @@ snapshots:
     dependencies:
       minipass: 3.3.6
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -854,10 +868,6 @@ snapshots:
 
   jiti@1.21.6: {}
 
-  jose@4.15.9: {}
-
-  jose@5.2.3: {}
-
   kysely-ctl@0.9.0(kysely@0.27.5):
     dependencies:
       c12: 1.11.2
@@ -874,10 +884,6 @@ snapshots:
       - magicast
 
   kysely@0.27.5: {}
-
-  lru-cache@6.0.0:
-    dependencies:
-      yallist: 4.0.0
 
   merge-stream@2.0.0: {}
 
@@ -920,8 +926,6 @@ snapshots:
       pkg-types: 1.2.1
       ufo: 1.5.4
 
-  object-hash@2.2.0: {}
-
   obuf@1.1.2: {}
 
   ofetch@1.4.1:
@@ -932,18 +936,9 @@ snapshots:
 
   ohash@1.1.4: {}
 
-  oidc-token-hash@5.0.3: {}
-
   onetime@6.0.0:
     dependencies:
       mimic-fn: 4.0.0
-
-  openid-client@5.6.4:
-    dependencies:
-      jose: 4.15.9
-      lru-cache: 6.0.0
-      object-hash: 2.2.0
-      oidc-token-hash: 5.0.3
 
   path-key@3.1.1: {}
 
@@ -1050,33 +1045,6 @@ snapshots:
   signal-exit@4.1.0: {}
 
   split2@4.2.0: {}
-
-  sst-darwin-arm64@3.3.59:
-    optional: true
-
-  sst-darwin-x64@3.3.59:
-    optional: true
-
-  sst-linux-arm64@3.3.59:
-    optional: true
-
-  sst-linux-x64@3.3.59:
-    optional: true
-
-  sst-linux-x86@3.3.59:
-    optional: true
-
-  sst@3.3.59:
-    dependencies:
-      aws4fetch: 1.0.20
-      jose: 5.2.3
-      openid-client: 5.6.4
-    optionalDependencies:
-      sst-darwin-arm64: 3.3.59
-      sst-darwin-x64: 3.3.59
-      sst-linux-arm64: 3.3.59
-      sst-linux-x64: 3.3.59
-      sst-linux-x86: 3.3.59
 
   std-env@3.8.0: {}
 

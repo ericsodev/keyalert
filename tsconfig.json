@@ -16,5 +16,9 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "esModuleInterop": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "cdk.out"
+  ]
 }
