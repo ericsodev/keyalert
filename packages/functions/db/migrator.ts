@@ -1,12 +1,14 @@
-import { FileMigrationProvider, Migrator } from "kysely";
-import { db } from "./database";
+import { FileMigrationProvider, Kysely, Migrator } from "kysely";
 import { promises as fs } from "fs";
 import * as path from "path";
+import { Database } from "./types";
 
 const provider = new FileMigrationProvider({
   fs,
   path,
-  migrationFolder: path.join(__dirname, "some/path/to/migrations"),
+  migrationFolder: path.join(__dirname, "./migrations/"),
 });
 
-export const migrator = new Migrator({ db, provider });
+export function createMigrator(db: Kysely<Database>) {
+  return new Migrator({ db, provider });
+}
