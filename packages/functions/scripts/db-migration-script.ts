@@ -1,4 +1,4 @@
-import { dbConnect } from "../db/database";
+import { dbConnect } from "../src/lib/db/database";
 import { createMigrator } from "../db/migrator";
 import { startTunnelling } from "./tunnel";
 
