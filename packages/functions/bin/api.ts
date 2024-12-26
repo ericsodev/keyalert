@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
-import { VpcStack } from "../lib/vpc-stack";
-import { SecurityStack } from "../lib/security-stack";
-import { BastionStack } from "../lib/bastion-stack";
-import { DatabaseStack } from "../lib/database-stack";
+import { VpcStack } from "../stacks/vpc-stack";
+import { SecurityStack } from "../stacks/security-stack";
+import { BastionStack } from "../stacks/bastion-stack";
+import { DatabaseStack } from "../stacks/database-stack";
 import * as dotenv from "dotenv";
 
 dotenv.config();

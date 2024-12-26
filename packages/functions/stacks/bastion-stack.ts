@@ -15,19 +15,6 @@ export class BastionStack extends cdk.Stack {
     super(scope, id);
     const { vpc, securityGroup } = props;
 
-    //const bastionHostLinux = new ec2.BastionHostLinux(this, "BastionHost", {
-    //  vpc: vpc,
-    //  securityGroup: securityGroup,
-    //  subnetSelection: {
-    //    subnetType: ec2.SubnetType.PUBLIC,
-    //  },
-    //  instanceType: ec2.InstanceType.of(
-    //    ec2.InstanceClass.T4G,
-    //    ec2.InstanceSize.MICRO,
-    //  ),
-    //  instanceName: "bastion-host",
-    //});
-
     // Lookup existing keypair
     const keypair = ec2.KeyPair.fromKeyPairName(
       this,
