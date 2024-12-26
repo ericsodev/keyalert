@@ -4,10 +4,11 @@ import * as tunnelConfig from "./tunnel.config.json";
 import { Client as SSHClient, type ConnectConfig as SshOptions } from "ssh2";
 import { createServer } from "net";
 
-export const LOCAL_TUNNEL_PORT = 5391;
+const PG_PORT = process.env["DB_PORT"] ? Number(process.env["DB_PORT"]) : 5432;
+const PG_TUNNEL_PORT = 5391;
 
 /**
- * Tunnel to RDS through bastion host
+ * Tunnel to RDS through bastion host on port 5432
  * @param cb Callback after tunnel to RDS is created
  */
 export async function startTunnelling(cb: () => Promise<unknown>) {
@@ -46,7 +47,7 @@ export async function startTunnelling(cb: () => Promise<unknown>) {
       },
     );
   });
-  localProxy.listen(LOCAL_TUNNEL_PORT, "127.0.0.1");
+  localProxy.listen(PG_TUNNEL_PORT, "127.0.0.1");
 
   // Connect to bastion host
   let sshClient = new SSHClient();

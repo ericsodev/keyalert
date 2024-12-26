@@ -1,3 +1,4 @@
+import { dbConnect } from "../db/database";
 import { createMigrator } from "../db/migrator";
 import { startTunnelling } from "./tunnel";
 
@@ -5,10 +6,10 @@ const stage =
   process.env["NODE_ENV"] === "production" ? "production" : "development";
 
 async function rollbackMigration() {
-  const { db } = await import("../db/database");
+  const db = dbConnect(stage === "production" ? "local-prod" : "development");
   const migrator = createMigrator(db);
   const { results, error } = await migrator.migrateDown();
-  await db.destroy();
+  db.destroy();
 
   results?.forEach((it) => {
     if (it.status === "Success") {
@@ -25,7 +26,6 @@ async function rollbackMigration() {
     console.error(error);
     process.exit(1);
   }
-  await db.destroy();
   console.log("🐥 Rolled back");
 }
 
