@@ -4,7 +4,6 @@ import * as tunnelConfig from "./tunnel.config.json";
 import { Client as SSHClient, type ConnectConfig as SshOptions } from "ssh2";
 import { createServer } from "net";
 
-const PG_PORT = process.env["DB_PORT"] ? Number(process.env["DB_PORT"]) : 5432;
 const PG_TUNNEL_PORT = 5391;
 
 /**
