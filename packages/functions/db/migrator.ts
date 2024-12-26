@@ -1,7 +1,7 @@
 import { FileMigrationProvider, Kysely, Migrator } from "kysely";
 import { promises as fs } from "fs";
 import * as path from "path";
-import { Database } from "./types";
+import { Database } from "@lib/db/types";
 
 const provider = new FileMigrationProvider({
   fs,
