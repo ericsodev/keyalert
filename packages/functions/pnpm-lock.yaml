@@ -11,9 +11,6 @@ importers:
       '@dotenvx/dotenvx':
         specifier: ^1.31.0
         version: 1.31.0
-      aws-cdk-lib:
-        specifier: 2.172.0
-        version: 2.172.0(constructs@10.4.2)
       constructs:
         specifier: ^10.0.0
         version: 10.4.2
@@ -45,6 +42,9 @@ importers:
       aws-cdk:
         specifier: 2.172.0
         version: 2.172.0
+      aws-cdk-lib:
+        specifier: 2.172.0
+        version: 2.172.0(constructs@10.4.2)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.7.9)(ts-node@10.9.2(@types/node@22.7.9)(typescript@5.6.3))
