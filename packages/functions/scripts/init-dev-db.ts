@@ -19,8 +19,6 @@ async function main() {
   console.log("🌱 Created database");
 
   await db.end();
-
-  // TODO: migrations
 }
 
 main();
