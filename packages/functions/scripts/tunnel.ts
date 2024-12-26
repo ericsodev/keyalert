@@ -1,9 +1,16 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as tunnelConfig from "./tunnel.config.json";
-import { createTunnel, SshOptions } from "tunnel-ssh";
+import { Client as SSHClient, type ConnectConfig as SshOptions } from "ssh2";
+import { createServer } from "net";
 
-export async function startTunnelling() {
+export const LOCAL_TUNNEL_PORT = 5391;
+
+/**
+ * Tunnel to RDS through bastion host
+ * @param cb Callback after tunnel to RDS is created
+ */
+export async function startTunnelling(cb: () => Promise<unknown>) {
   if (process.env["NODE_ENV"] !== "production") {
     // Can't tunnel outside prod env
     return;
@@ -22,22 +29,44 @@ export async function startTunnelling() {
     debug: undefined,
   };
 
-  const tunnel = await createTunnel(
-    { autoClose: true, reconnectOnError: false },
-    {},
-    { ...sshConfig },
-    {
-      dstPort: 5432,
-      dstAddr: process.env["DB_HOST"] ?? "",
+  let ready = false;
 
-      // Local port to connect to prod db
-      srcPort: 5391,
-      srcAddr: "127.0.0.1",
-    },
-  );
+  // Proxy to reroute connections to local port through tunnel
+  let localProxy = createServer(function (sock: any) {
+    if (!ready) return sock.destroy();
+    sshClient.forwardOut(
+      sock.remoteAddress,
+      sock.remotePort,
+      process.env["DB_HOST"] ?? "",
+      5432,
+      function (err: any, stream: any) {
+        if (err) return sock.destroy();
+        sock.pipe(stream);
+        stream.pipe(sock);
+      },
+    );
+  });
+  localProxy.listen(LOCAL_TUNNEL_PORT, "127.0.0.1");
 
-  const client = tunnel[1];
+  // Connect to bastion host
+  let sshClient = new SSHClient();
+  sshClient.connect(sshConfig);
+  sshClient.on("connect", function () {
+    console.log("Connected to bastion host");
+  });
+
+  sshClient
+    .on("ready", async function () {
+      ready = true;
+      await cb();
+
+      // Cleanup
+      sshClient.end();
+      localProxy.close();
+    })
+    .on("close", () => {
+      console.log("SSH Connection closed");
+    });
 
   console.log("🛜 Successfully tunnelled to bastion host");
-  return tunnel;
 }

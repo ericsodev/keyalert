@@ -4,12 +4,7 @@ import { startTunnelling } from "./tunnel";
 const stage =
   process.env["NODE_ENV"] === "production" ? "production" : "development";
 
-async function main() {
-  let tunnel;
-  if (stage === "production") {
-    tunnel = await startTunnelling();
-  }
-
+async function migrateLatest() {
   const { db } = await import("../db/database");
   const migrator = createMigrator(db);
   const { error, results } = await migrator.migrateToLatest();
@@ -32,8 +27,14 @@ async function main() {
   }
   await db.destroy();
   console.log("🐥 Ran migrations");
+}
 
-  tunnel?.[0].close();
+async function main() {
+  if (stage === "production") {
+    await startTunnelling(migrateLatest);
+  } else {
+    await migrateLatest();
+  }
 }
 
 main();
