@@ -37,7 +37,10 @@ export async function startTunnelling(cb: () => Promise<unknown>) {
 
   // Proxy to reroute connections to local port through tunnel
   const localProxy = createServer(function (sock: Socket) {
-    if (!ready) return sock.destroy();
+    if (!ready) {
+      sock.destroy();
+      return;
+    }
     sshClient.forwardOut(
       sock.remoteAddress ?? "",
       sock.remotePort ?? 5432,
