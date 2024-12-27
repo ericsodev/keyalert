@@ -1,6 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "devDependencies": {
+    "husky": "^9.1.7",
     "typescript": "^5.7.2"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "lint": "cd ./packages/functions/ && npm run lint && npm run typecheck"
   }
 }

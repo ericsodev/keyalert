@@ -1,7 +1,6 @@
 import * as cdk from "aws-cdk-lib";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
-import { lambdas } from "../src/functions/internal/lambdas";
 import * as path from "path";
 
 interface Props extends cdk.StackProps {
@@ -23,7 +22,6 @@ export class InternalLambdaStack extends cdk.Stack {
       );
 
     const outDir = path.resolve(__dirname, "../build/db-heartbeat/bundle");
-    const outFile = path.join(outDir, "index.js");
 
     const dbSecret = cdk.aws_secretsmanager.Secret.fromSecretNameV2(
       this,

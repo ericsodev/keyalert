@@ -1,0 +1,40 @@
+name: Lint 
+
+on: 
+  pull_request: 
+    branches:
+      - staging
+      - main
+  push:
+    branches: 
+      - staging
+      - main
+
+env: 
+  NODE_VERSION: 20
+
+jobs:
+  linting:
+    name: Linting 
+    runs-on: ubuntu-latest 
+    steps: # list of steps
+      - name: Install NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Code Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        working-directory: ./packages/functions
+        run: npm i
+
+      - name: Code Linting
+        working-directory: ./packages/functions
+        run: npm run lint
+
+      - name: Typechecking
+        working-directory: ./packages/functions
+        run: npm run typecheck
+
