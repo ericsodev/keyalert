@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import * as fs from "fs";
 import * as path from "path";
 import * as tunnelConfig from "./tunnel.config.json";
