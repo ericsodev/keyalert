@@ -10,9 +10,16 @@ interface SecurityStackProps extends cdk.StackProps {
 export class SecurityStack extends cdk.Stack {
   //public readonly rdsSecurityGroup: ec2.SecurityGroup;
   public readonly bastionSecurityGroup: ec2.SecurityGroup;
+  public readonly internalLambdaSecurityGroup: ec2.SecurityGroup;
 
   constructor(scope: Construct, id: string, props: SecurityStackProps) {
-    super(scope, id);
+    super(scope, id, props);
+
+    this.internalLambdaSecurityGroup = new ec2.SecurityGroup(
+      this,
+      "InternalLambdaSecurityGroup",
+      { vpc: props.vpc, securityGroupName: "internal-lambda-security-group" },
+    );
 
     this.bastionSecurityGroup = new ec2.SecurityGroup(
       this,

@@ -10,7 +10,7 @@ interface BastionConstructProps extends cdk.StackProps {
 
 export class BastionStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: BastionConstructProps) {
-    super(scope, id);
+    super(scope, id, props);
     const { vpc, securityGroup } = props;
 
     // Lookup existing keypair

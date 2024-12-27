@@ -5,20 +5,24 @@ import { Construct } from "constructs";
 
 interface DatabaseConstructProps extends cdk.StackProps {
   vpc: ec2.Vpc;
-  bastionSecurityGroup: ec2.SecurityGroup;
+  allowSecurityGroups: ec2.SecurityGroup[];
 }
 
 export class DatabaseStack extends cdk.Stack {
   public readonly database: rds.DatabaseInstance;
 
   constructor(scope: Construct, id: string, props: DatabaseConstructProps) {
-    super(scope, id);
+    super(scope, id, props);
 
-    const { vpc, bastionSecurityGroup } = props;
+    const { vpc, allowSecurityGroups } = props;
 
     const database = new rds.DatabaseInstance(this, "keyalert-database", {
       instanceIdentifier: "keyalert-database",
       databaseName: "keyalert",
+      credentials: {
+        username: "postgres",
+        secretName: "keyalert-db-credentials",
+      },
       vpc,
       engine: rds.DatabaseInstanceEngine.postgres({
         version: rds.PostgresEngineVersion.VER_17_2,
@@ -37,9 +41,8 @@ export class DatabaseStack extends cdk.Stack {
       multiAz: false,
     });
 
-    database.connections.allowDefaultPortFrom(
-      bastionSecurityGroup,
-      "Allow RDS access from Bastion Host",
-    );
+    for (const securityGroup of allowSecurityGroups) {
+      database.connections.allowDefaultPortFrom(securityGroup);
+    }
   }
 }
