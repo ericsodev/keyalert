@@ -6,6 +6,6 @@
   },
   "scripts": {
     "prepare": "husky",
-    "lint": "cd ./packages/functions/ && npm run lint"
+    "lint": "cd ./packages/functions/ && npm run lint && npm run typecheck"
   }
 }

@@ -23,6 +23,7 @@
     "db:rollback": "NODE_ENV=development tsx ./scripts/db-rollback-script.ts",
     "db:production:rollback": "dotenvx run -f .env.production --env NODE_ENV=production -- tsx ./scripts/db-rollback-script.ts",
     "test:db:production": "dotenvx run -f .env.production --env NODE_ENV=production -- tsx ./scripts/test-prod-db.ts",
+    "typecheck": "tsc --noemit",
     "lint": "eslint -c eslint.config.mjs .",
     "lint:fix": "eslint -c eslint.config.mjs --fix ."
   },

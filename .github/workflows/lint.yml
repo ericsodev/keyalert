@@ -34,3 +34,7 @@ jobs:
         working-directory: ./packages/functions
         run: npm run lint
 
+      - name: Typechecking
+        working-directory: ./packages/functions
+        run: npm run typecheck
+
