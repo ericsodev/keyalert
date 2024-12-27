@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
-import { VpcStack } from "../lib/vpc-stack";
-import { SecurityStack } from "../lib/security-stack";
-import { BastionStack } from "../lib/bastion-stack";
-import { DatabaseStack } from "../lib/database-stack";
+import { VpcStack } from "../stacks/vpc-stack";
+import { SecurityStack } from "../stacks/security-stack";
+import { BastionStack } from "../stacks/bastion-stack";
+import { DatabaseStack } from "../stacks/database-stack";
 import * as dotenv from "dotenv";
+import { InternalLambdaStack } from "../stacks/internal-lambda-stack";
 
-dotenv.config();
+dotenv.config({ path: ".env.production" });
 
 const localIp = process.env["LOCAL_IP"];
 if (!localIp) throw new Error("Missing local whitelisted IP");
@@ -41,9 +42,22 @@ const bastion = new BastionStack(app, "BastionStack", {
 });
 
 const rds = new DatabaseStack(app, "DatabaseStack", {
-  bastionSecurityGroup: securityStack.bastionSecurityGroup,
+  allowSecurityGroups: [
+    securityStack.bastionSecurityGroup,
+    securityStack.internalLambdaSecurityGroup,
+  ],
   vpc: vpc.vpc,
   stackName: "database-stack",
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
+
+const internalLambda = new InternalLambdaStack(app, "InternalLambdaStack", {
+  vpc: vpc.vpc,
+  stackName: "internal-lambda-stack",
+  securityGroup: securityStack.internalLambdaSecurityGroup,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,

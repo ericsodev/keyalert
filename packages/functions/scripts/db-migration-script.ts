@@ -1,3 +1,4 @@
+import { dbConnect } from "../src/lib/db/database";
 import { createMigrator } from "../db/migrator";
 import { startTunnelling } from "./tunnel";
 
@@ -5,10 +6,10 @@ const stage =
   process.env["NODE_ENV"] === "production" ? "production" : "development";
 
 async function migrateLatest() {
-  const { db } = await import("../db/database");
+  const db = dbConnect(stage === "production" ? "local-prod" : "development");
   const migrator = createMigrator(db);
   const { error, results } = await migrator.migrateToLatest();
-  await db.destroy();
+  db.destroy();
 
   results?.forEach((it) => {
     if (it.status === "Success") {
@@ -25,7 +26,6 @@ async function migrateLatest() {
     console.error(error);
     process.exit(1);
   }
-  await db.destroy();
   console.log("🐥 Ran migrations");
 }
 

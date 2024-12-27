@@ -1,9 +1,7 @@
 import * as ec2 from "aws-cdk-lib/aws-ec2";
-import * as rds from "aws-cdk-lib/aws-rds";
 import * as cdk from "aws-cdk-lib";
 
 import { Construct } from "constructs";
-import { Secret } from "aws-cdk-lib/aws-secretsmanager";
 
 interface BastionConstructProps extends cdk.StackProps {
   vpc: ec2.Vpc;
@@ -12,21 +10,8 @@ interface BastionConstructProps extends cdk.StackProps {
 
 export class BastionStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: BastionConstructProps) {
-    super(scope, id);
+    super(scope, id, props);
     const { vpc, securityGroup } = props;
-
-    //const bastionHostLinux = new ec2.BastionHostLinux(this, "BastionHost", {
-    //  vpc: vpc,
-    //  securityGroup: securityGroup,
-    //  subnetSelection: {
-    //    subnetType: ec2.SubnetType.PUBLIC,
-    //  },
-    //  instanceType: ec2.InstanceType.of(
-    //    ec2.InstanceClass.T4G,
-    //    ec2.InstanceSize.MICRO,
-    //  ),
-    //  instanceName: "bastion-host",
-    //});
 
     // Lookup existing keypair
     const keypair = ec2.KeyPair.fromKeyPairName(
