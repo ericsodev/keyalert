@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as cdk from "aws-cdk-lib";
 import { VpcStack } from "../stacks/vpc-stack";
 import { SecurityStack } from "../stacks/security-stack";

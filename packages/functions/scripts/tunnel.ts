@@ -1,8 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as tunnelConfig from "./tunnel.config.json";
-import { Client as SSHClient, type ConnectConfig as SshOptions } from "ssh2";
-import { createServer } from "net";
+import {
+  ClientChannel,
+  Client as SSHClient,
+  type ConnectConfig as SshOptions,
+} from "ssh2";
+import { createServer, Socket } from "net";
 
 const PG_TUNNEL_PORT = 5391;
 
@@ -32,15 +36,18 @@ export async function startTunnelling(cb: () => Promise<unknown>) {
   let ready = false;
 
   // Proxy to reroute connections to local port through tunnel
-  let localProxy = createServer(function (sock: any) {
+  const localProxy = createServer(function (sock: Socket) {
     if (!ready) return sock.destroy();
     sshClient.forwardOut(
-      sock.remoteAddress,
-      sock.remotePort,
+      sock.remoteAddress ?? "",
+      sock.remotePort ?? 5432,
       process.env["DB_HOST"] ?? "",
       5432,
-      function (err: any, stream: any) {
-        if (err) return sock.destroy();
+      function (err: unknown, stream: ClientChannel) {
+        if (err) {
+          sock.destroy();
+          return;
+        }
         sock.pipe(stream);
         stream.pipe(sock);
       },
@@ -49,7 +56,7 @@ export async function startTunnelling(cb: () => Promise<unknown>) {
   localProxy.listen(PG_TUNNEL_PORT, "127.0.0.1");
 
   // Connect to bastion host
-  let sshClient = new SSHClient();
+  const sshClient = new SSHClient();
   sshClient.connect(sshConfig);
   sshClient.on("connect", function () {
     console.log("Connected to bastion host");

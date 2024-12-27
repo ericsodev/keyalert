@@ -8,7 +8,6 @@ interface SecurityStackProps extends cdk.StackProps {
 }
 
 export class SecurityStack extends cdk.Stack {
-  //public readonly rdsSecurityGroup: ec2.SecurityGroup;
   public readonly bastionSecurityGroup: ec2.SecurityGroup;
   public readonly internalLambdaSecurityGroup: ec2.SecurityGroup;
 
