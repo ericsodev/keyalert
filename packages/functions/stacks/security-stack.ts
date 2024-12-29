@@ -14,24 +14,20 @@ export class SecurityStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: SecurityStackProps) {
     super(scope, id, props);
 
-    this.internalLambdaSecurityGroup = new ec2.SecurityGroup(
-      this,
-      "InternalLambdaSecurityGroup",
-      { vpc: props.vpc, securityGroupName: "internal-lambda-security-group" },
-    );
+    this.internalLambdaSecurityGroup = new ec2.SecurityGroup(this, "InternalLambdaSecurityGroup", {
+      // @ts-expect-error aws lib error
+      vpc: props.vpc,
+      securityGroupName: "internal-lambda-security-group",
+    });
 
-    this.bastionSecurityGroup = new ec2.SecurityGroup(
-      this,
-      "BastionSecurityGroup",
-      { vpc: props.vpc, securityGroupName: "bastion-security-group" },
-    );
+    this.bastionSecurityGroup = new ec2.SecurityGroup(this, "BastionSecurityGroup", {
+      // @ts-expect-error aws lib error
+      vpc: props.vpc,
+      securityGroupName: "bastion-security-group",
+    });
 
     for (const ip of props.whitelistedIps) {
-      this.bastionSecurityGroup.addIngressRule(
-        ec2.Peer.ipv4(ip),
-        ec2.Port.tcp(22),
-        "Bastion SSH",
-      );
+      this.bastionSecurityGroup.addIngressRule(ec2.Peer.ipv4(ip), ec2.Port.tcp(22), "Bastion SSH");
     }
   }
 }

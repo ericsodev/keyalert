@@ -14,12 +14,11 @@ export class InternalLambdaStack extends cdk.Stack {
 
     const { vpc } = props;
 
-    const parametersAndSecretsExtension =
-      lambda.LayerVersion.fromLayerVersionArn(
-        this,
-        "ParametersAndSecretsLambdaExtension",
-        "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:12",
-      );
+    const parametersAndSecretsExtension = lambda.LayerVersion.fromLayerVersionArn(
+      this,
+      "ParametersAndSecretsLambdaExtension",
+      "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:12",
+    );
 
     const outDir = path.resolve(__dirname, "../build/db-heartbeat/bundle");
 
@@ -39,6 +38,7 @@ export class InternalLambdaStack extends cdk.Stack {
       handler: "index.handler",
       runtime: lambda.Runtime.NODEJS_20_X,
       timeout: cdk.Duration.seconds(29),
+      // @ts-expect-error aws lib error
       vpc: vpc,
       functionName: "db-heartbeat",
       securityGroups: [props.securityGroup],
