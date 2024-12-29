@@ -18,11 +18,18 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noUncheckedSideEffectImports": true,
+    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": false,
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
+    "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
@@ -36,6 +43,7 @@
     }
   },
   "exclude": [
+    "**/node_modules/*",
     "node_modules",
     "cdk.out",
     "scripts"
