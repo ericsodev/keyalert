@@ -46,6 +46,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("name", "varchar(64)", (col) => col.notNull())
     .addColumn("size", "varchar(64)", (col) => col.notNull())
     .addColumn("designer", "varchar(64)", (col) => col.notNull())
+    .addColumn("description", "varchar(256)")
     .addColumn("timestamp", "timestamptz", (col) => col.notNull())
     .addColumn("ingestId", "uuid", (col) =>
       col.references("ingest_log.id").unique().notNull().onDelete("cascade"),
