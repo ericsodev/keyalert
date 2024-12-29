@@ -1,5 +1,5 @@
 import { Pool, PoolConfig } from "pg";
-import { Kysely, PostgresDialect } from "kysely";
+import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
 import { Database } from "./types";
 import { z } from "zod";
 
@@ -20,8 +20,7 @@ export class DatabaseConnection {
     if (stage) {
       this.stage = stage;
     } else {
-      this.stage =
-        process.env["NODE_ENV"] === "production" ? "production" : "development";
+      this.stage = process.env["NODE_ENV"] === "production" ? "production" : "development";
     }
   }
 
@@ -30,6 +29,7 @@ export class DatabaseConnection {
       this.database = new Kysely<Database>({
         dialect: this.dialect,
         log: ["error"],
+        plugins: [new CamelCasePlugin()],
       });
     }
     return this.database;
