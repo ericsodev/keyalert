@@ -18,16 +18,16 @@ export enum IngestTargetType {
 interface BaseTable {
   id: GeneratedAlways<string>;
   createdAt: ColumnType<Date, never, never>;
-  updatedAt: ColumnType<Date, never, string>;
-  deletedAt: ColumnType<Date | null, never, string | null>;
+  updatedAt: ColumnType<Date, never, Date>;
+  deletedAt: ColumnType<Date | null, never, Date | null>;
 }
 
 export interface IngestBatchTable extends BaseTable {
   source: IngestSource;
-  timestamp: ColumnType<Date, string, string>;
+  timestamp: Date;
   triggeredManually: boolean;
-  startDate: ColumnType<Date, string, undefined>;
-  endDate: ColumnType<Date, string, undefined>;
+  startDate: ColumnType<Date, Date, never>;
+  endDate: ColumnType<Date, Date, never>;
 }
 
 export interface IngestLogTable extends BaseTable {
@@ -35,7 +35,7 @@ export interface IngestLogTable extends BaseTable {
   type: IngestTargetType;
   source: IngestSource;
   externalId: string;
-  timestamp: ColumnType<Date, string, string>;
+  timestamp: Date;
   ingestBatchId: string;
 }
 
@@ -54,7 +54,7 @@ export interface KeyboardListingTable extends BaseTable {
   name: string;
   size: KeyboardSize;
   designer: string;
-  timestamp: ColumnType<Date, string, string>;
+  timestamp: Date;
   description: string | null;
   ingestId: string;
 }

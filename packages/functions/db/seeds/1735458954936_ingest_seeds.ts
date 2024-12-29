@@ -9,10 +9,10 @@ export async function seed(db: Kysely<Database>): Promise<void> {
   const ingestBatch = await db
     .insertInto("ingest_batch")
     .values({
-      startDate: new Date("2024-08-18").toISOString(),
-      endDate: new Date("2024-08-19").toISOString(),
+      startDate: new Date("2024-08-18"),
+      endDate: new Date("2024-08-19"),
       source: IngestSource.MANUAL,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date(),
       triggeredManually: true,
     })
     .returningAll()
@@ -26,7 +26,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         type: IngestTargetType.KEYBOARD,
         source: IngestSource.MANUAL,
         externalId: "1",
-        timestamp: new Date().toISOString(),
+        timestamp: new Date(),
         ingestBatchId: ingestBatch.id,
       },
       {
@@ -34,7 +34,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         type: IngestTargetType.KEYBOARD,
         source: IngestSource.MANUAL,
         externalId: "2",
-        timestamp: new Date().toISOString(),
+        timestamp: new Date(),
         ingestBatchId: ingestBatch.id,
       },
     ])
@@ -50,7 +50,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         size: KeyboardSize.SIZE_65,
         description: "This is a keyboard",
         name: "Neo 65",
-        timestamp: new Date("2023-04-01").toISOString(),
+        timestamp: new Date("2023-04-01"),
       },
       {
         ingestId: ingestLogs[1]?.id ?? "",
@@ -58,7 +58,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         size: KeyboardSize.ALICE,
         description: "This is a ergo keyboard",
         name: "Neo Ergo",
-        timestamp: new Date("2024-05-01").toISOString(),
+        timestamp: new Date("2024-05-01"),
       },
     ])
     .execute();
