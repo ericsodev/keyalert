@@ -47,12 +47,16 @@ export class DatabaseConnection {
       case "development":
         return {
           database: "keyalert",
-          host: "127.0.0.1",
+          // If DB_HOST env var is set, then we are connecting from a synthesized environment
+          // such as local lambda in docker,
+          // Otherwise, we are connecting for migration/seeding so we fallback to localhost ip
+          host: process.env["DB_HOST"] ?? "127.0.0.1",
           port: 5432,
-          user: "keyalert",
+          user: "eric",
           max: 1,
         };
       case "local-prod":
+        // Used to connect to prod db while running migrations from a local script.
         env = prodEnvSchema.parse(process.env);
         return {
           database: env.DB_NAME,

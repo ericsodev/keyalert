@@ -1,25 +1,16 @@
-import { DummyDriver, PostgresAdapter, PostgresIntrospector, PostgresQueryCompiler } from "kysely";
 import { defineConfig } from "kysely-ctl";
+import { DatabaseConnection } from "../../src/lib/db/database";
+import { CamelCasePlugin } from "kysely";
 
+const dbConfig = new DatabaseConnection("development");
+
+// Config only used for kysely cli to create new migrations/seeds and run local seeds
 export default defineConfig({
-  dialect: {
-    createAdapter() {
-      return new PostgresAdapter();
-    },
-    createDriver() {
-      return new DummyDriver();
-    },
-    createIntrospector(db) {
-      return new PostgresIntrospector(db);
-    },
-    createQueryCompiler() {
-      return new PostgresQueryCompiler();
-    },
-  },
+  dialect: dbConfig.dialect,
+  plugins: [new CamelCasePlugin()],
   migrations: {
     migrationFolder: "migrations",
   },
-  //   plugins: [],
   seeds: {
     seedFolder: "seeds",
   },
