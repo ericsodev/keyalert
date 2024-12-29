@@ -2,8 +2,7 @@ import { dbConnect } from "../src/lib/db/database";
 import { createMigrator } from "../db/migrator";
 import { startTunnelling } from "./tunnel";
 
-const stage =
-  process.env["NODE_ENV"] === "production" ? "production" : "development";
+const stage = process.env["NODE_ENV"] === "production" ? "production" : "development";
 
 async function rollbackMigration() {
   const db = dbConnect(stage === "production" ? "local-prod" : "development");
@@ -13,9 +12,7 @@ async function rollbackMigration() {
 
   results?.forEach((it) => {
     if (it.status === "Success") {
-      console.log(
-        `🟢 Migration "${it.migrationName}" was rolled back successfully`,
-      );
+      console.log(`🟢 Migration "${it.migrationName}" was rolled back successfully`);
     } else if (it.status === "Error") {
       console.error(`Failed to roll back migration "${it.migrationName}"`);
     }
