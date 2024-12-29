@@ -36,6 +36,7 @@ export interface IngestLogTable extends BaseTable {
   source: IngestSource;
   externalId: string;
   timestamp: ColumnType<Date, string, string>;
+  ingestBatchId: string;
 }
 
 export enum KeyboardSize {
