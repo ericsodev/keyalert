@@ -3,9 +3,7 @@ import { sql, type Kysely } from "kysely";
 export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .createTable("ingest_log")
-    .addColumn("id", "uuid", (col) =>
-      col.primaryKey().defaultTo(sql`gen_random_uuid()`),
-    )
+    .addColumn("id", "uuid", (col) => col.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamptz", (col) =>
       col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),
     )
@@ -18,18 +16,12 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("source", "varchar(64)", (col) => col.notNull())
     .addColumn("external_id", "varchar(256)", (col) => col.notNull())
     .addColumn("timestamp", "timestamptz", (col) => col.notNull())
-    .addUniqueConstraint("source_external_id_unique", [
-      "source",
-      "external_id",
-      "deleted_at",
-    ])
+    .addUniqueConstraint("source_external_id_unique", ["source", "external_id", "deleted_at"])
     .execute();
 
   await db.schema
     .createTable("keyboard")
-    .addColumn("id", "uuid", (col) =>
-      col.primaryKey().defaultTo(sql`gen_random_uuid()`),
-    )
+    .addColumn("id", "uuid", (col) => col.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamptz", (col) =>
       col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),
     )
