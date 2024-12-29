@@ -1,5 +1,5 @@
 import { Pool, PoolConfig } from "pg";
-import { Kysely, PostgresDialect } from "kysely";
+import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
 import { Database } from "./types";
 import { z } from "zod";
 
@@ -20,8 +20,7 @@ export class DatabaseConnection {
     if (stage) {
       this.stage = stage;
     } else {
-      this.stage =
-        process.env["NODE_ENV"] === "production" ? "production" : "development";
+      this.stage = process.env["NODE_ENV"] === "production" ? "production" : "development";
     }
   }
 
@@ -30,6 +29,7 @@ export class DatabaseConnection {
       this.database = new Kysely<Database>({
         dialect: this.dialect,
         log: ["error"],
+        plugins: [new CamelCasePlugin()],
       });
     }
     return this.database;
@@ -47,12 +47,16 @@ export class DatabaseConnection {
       case "development":
         return {
           database: "keyalert",
-          host: "127.0.0.1",
+          // If DB_HOST env var is set, then we are connecting from a synthesized environment
+          // such as local lambda in docker,
+          // Otherwise, we are connecting for migration/seeding so we fallback to localhost ip
+          host: process.env["DB_HOST"] ?? "127.0.0.1",
           port: 5432,
-          user: "keyalert",
+          user: "eric",
           max: 1,
         };
       case "local-prod":
+        // Used to connect to prod db while running migrations from a local script.
         env = prodEnvSchema.parse(process.env);
         return {
           database: env.DB_NAME,

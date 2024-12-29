@@ -3,11 +3,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as tunnelConfig from "./tunnel.config.json";
-import {
-  ClientChannel,
-  Client as SSHClient,
-  type ConnectConfig as SshOptions,
-} from "ssh2";
+import { ClientChannel, Client as SSHClient, type ConnectConfig as SshOptions } from "ssh2";
 import { createServer, Socket } from "net";
 
 const PG_TUNNEL_PORT = 5391;

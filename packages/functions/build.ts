@@ -13,9 +13,7 @@ export async function bundleInternalLambdas(lambdas: LambdaToBuild[]) {
     console.log("Building", lambda.name);
 
     await build({
-      entryPoints: [
-        path.resolve(__dirname, "./src/functions/internal/", lambda.entry),
-      ],
+      entryPoints: [path.resolve(__dirname, "./src/functions/internal/", lambda.entry)],
       outfile: outFile,
       bundle: true,
       target: "node16",

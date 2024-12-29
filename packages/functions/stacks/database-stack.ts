@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 interface DatabaseConstructProps extends cdk.StackProps {
   vpc: ec2.Vpc;
   allowSecurityGroups: ec2.SecurityGroup[];
+  stage: "production" | "development";
 }
 
 export class DatabaseStack extends cdk.Stack {
@@ -23,6 +24,7 @@ export class DatabaseStack extends cdk.Stack {
         username: "postgres",
         secretName: "keyalert-db-credentials",
       },
+      //@ts-expect-error internal aws strict error
       vpc,
       engine: rds.DatabaseInstanceEngine.postgres({
         version: rds.PostgresEngineVersion.VER_17_2,
@@ -33,10 +35,7 @@ export class DatabaseStack extends cdk.Stack {
       backupRetention: cdk.Duration.days(0),
       deleteAutomatedBackups: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
-      instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.T4G,
-        ec2.InstanceSize.MICRO,
-      ),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
       allocatedStorage: 20,
       multiAz: false,
     });
