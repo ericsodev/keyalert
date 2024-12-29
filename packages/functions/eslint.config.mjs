@@ -9,5 +9,11 @@ export default [
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  eslintPluginPrettierRecommended,
+  {
+    ...eslintPluginPrettierRecommended,
+    rules: {
+      ...eslintPluginPrettierRecommended.rules,
+      "max-len": ["error", { code: 100, ignoreUrls: true }],
+    },
+  },
 ];
