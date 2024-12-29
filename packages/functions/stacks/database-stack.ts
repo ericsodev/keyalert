@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 interface DatabaseConstructProps extends cdk.StackProps {
   vpc: ec2.Vpc;
   allowSecurityGroups: ec2.SecurityGroup[];
+  stage: "production" | "development";
 }
 
 export class DatabaseStack extends cdk.Stack {

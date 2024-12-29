@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 interface BastionConstructProps extends cdk.StackProps {
   vpc: ec2.Vpc;
   securityGroup: ec2.SecurityGroup;
+  stage: "production" | "development";
 }
 
 export class BastionStack extends cdk.Stack {

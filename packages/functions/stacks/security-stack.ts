@@ -5,6 +5,7 @@ import { Construct } from "constructs";
 interface SecurityStackProps extends cdk.StackProps {
   vpc: ec2.Vpc;
   whitelistedIps: string[];
+  stage: "production" | "development";
 }
 
 export class SecurityStack extends cdk.Stack {
