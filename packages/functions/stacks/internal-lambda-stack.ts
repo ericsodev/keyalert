@@ -1,8 +1,8 @@
 import * as cdk from "aws-cdk-lib";
 import * as lambda from "aws-cdk-lib/aws-lambda";
-import { NodejsFunction, SourceMapMode } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
 import * as path from "path";
+import { NodeLambdaConstruct } from "../constructs/node-lambda";
 
 interface Props extends cdk.StackProps {
   vpc: cdk.aws_ec2.Vpc;
@@ -13,8 +13,6 @@ interface Props extends cdk.StackProps {
 export class InternalLambdaStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
-
-    const { vpc } = props;
 
     const parametersAndSecretsExtension = lambda.LayerVersion.fromLayerVersionArn(
       this,
@@ -46,30 +44,17 @@ export class InternalLambdaStack extends cdk.Stack {
       };
     }
 
-    const dbHeartbeatFunction = new NodejsFunction(this, "DatabaseHeartbeat", {
+    new NodeLambdaConstruct(this, "DatabaseHeartbeat", {
       entry: path.resolve(__dirname, "../src/functions/internal/db/heartbeat.ts"),
-      handler: "handler",
-      runtime: lambda.Runtime.NODEJS_20_X,
-      timeout: cdk.Duration.seconds(15),
-      memorySize: 256,
-      // @ts-expect-error aws lib error
-      vpc: vpc,
-      functionName: "db-heartbeat",
-      securityGroups: [props.securityGroup],
-      environment: {
+      env: {
         NODE_ENV: props.stage,
         ...dbConfig,
       },
-      bundling: {
-        minify: true,
-        sourceMap: true,
-        sourceMapMode: SourceMapMode.INLINE,
-        sourcesContent: true,
-        target: "esnext",
-        externalModules: ["aws-sdk"],
-      },
+      layers: [parametersAndSecretsExtension],
+      functionName: "db-heartbeat",
+      securityGroup: props.securityGroup,
+      // @ts-expect-error aws lib error
+      vpc: props.vpc,
     });
-
-    dbHeartbeatFunction.addLayers(parametersAndSecretsExtension);
   }
 }
