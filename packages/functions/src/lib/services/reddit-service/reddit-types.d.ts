@@ -1,14 +1,17 @@
-import type { Subreddit } from "snoowrap";
+import type { Comment, Subreddit } from "snoowrap";
 
-export interface SearchSubredditParameters extends Record<string, string | number | boolean> {
+interface LimitParameters {
+  sort: "hot" | "top" | "new" | "comments";
+  limit: number;
+}
+
+export interface SearchSubredditParameters extends LimitParameters {
   after?: string;
   before?: string;
   q: string;
   count?: string;
-  limit: string;
   restrict_sr: boolean;
   show?: "all";
-  sort: "hot" | "top" | "new" | "comments";
   sr_detail?: boolean;
   time?: "hour" | "day" | "week" | "month";
   type?: string;
@@ -19,9 +22,33 @@ export interface RedditSearchSubmissionResponse {
   data: {
     modhash: string;
     dist: number;
-    after: string;
-    children: { kind: string; data: RedditSubmission }[];
+    after: string | null;
+    children: { kind: string; data: RedditSubmissionListing }[];
   };
 }
 
-type RedditSubmission = Awaited<ReturnType<typeof Subreddit.prototype.search>>[number];
+type RedditSubmissionListing = Awaited<ReturnType<typeof Subreddit.prototype.search>>[number];
+
+export interface GetCommentsParameters extends LimitParameters {
+  comment?: string;
+  context?: number;
+  depth?: number;
+  sr_detail?: boolean;
+  showedits?: boolean;
+  showmedia?: boolean;
+  showmore?: boolean;
+  showtitle?: boolean;
+}
+
+export type RedditCommentsResponse = [
+  RedditSearchSubmissionResponse,
+  {
+    kind: "Listing";
+    data: {
+      modhash: string;
+      dist: number;
+      after: string | null;
+      children: { kind: "t1"; data: Comment }[];
+    };
+  },
+];

@@ -1,7 +1,12 @@
 import { getSecret } from "@utils/aws/secret.js";
 import { z } from "zod";
 import axios from "axios";
-import { RedditSearchSubmissionResponse, SearchSubredditParameters } from "./reddit-types";
+import type {
+  GetCommentsParameters,
+  RedditCommentsResponse,
+  RedditSearchSubmissionResponse,
+  SearchSubredditParameters,
+} from "./reddit-types";
 
 const REDDIT_OAUTH_URL = "https://www.reddit.com/api/v1/access_token?grant_type=client_credentials";
 const REDDIT_BASE_URL = "https://oauth.reddit.com";
@@ -37,7 +42,38 @@ export class RedditService {
     return data.access_token as string;
   }
 
-  public async listPosts(
+  public async getSubmissionComments(
+    subreddit: string,
+    submissionId: string,
+    params: GetCommentsParameters,
+  ): Promise<RedditCommentsResponse> {
+    const token = this.token ?? (await this.getToken());
+
+    const queryParams = new URLSearchParams();
+    for (const [key, val] of Object.entries(params)) {
+      if (typeof val === "string") {
+        queryParams.append(key, val);
+      } else if (typeof val === "boolean") {
+        queryParams.append(key, new Boolean(val).toString());
+      } else if (typeof val === "number") {
+        queryParams.append(key, new Number(val).toString());
+      }
+    }
+
+    const url = `${REDDIT_BASE_URL}/r/${subreddit}/comments/
+      ${submissionId}?${queryParams.toString()}`;
+
+    const { data } = await axios.get<RedditCommentsResponse>(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "User-Agent": "Keyboard searcher",
+      },
+    });
+
+    return data;
+  }
+
+  public async searchSubmissions(
     subreddit: string,
     params: SearchSubredditParameters,
   ): Promise<RedditSearchSubmissionResponse> {
