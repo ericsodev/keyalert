@@ -8,6 +8,7 @@ import { DatabaseStack } from "../stacks/database-stack";
 import * as dotenv from "dotenv";
 import { InternalLambdaStack } from "../stacks/internal-lambda-stack";
 import { z } from "zod";
+import { SecretsStack } from "../stacks/secrets-stack";
 
 const stage = z.enum(["production", "development"]).parse(process.env["NODE_ENV"]);
 
@@ -27,24 +28,23 @@ const envSchema = z.object({
 
 const env = envSchema.parse(process.env);
 
+const accountEnv = {
+  account: env.CDK_DEFAULT_ACCOUNT,
+  region: env.CDK_DEFAULT_REGION,
+};
+
 const app = new cdk.App();
 const vpc = new VpcStack(app, "VpcStack", {
   stackName: "vpc-stack",
   stage,
-  env: {
-    account: env.CDK_DEFAULT_ACCOUNT,
-    region: env.CDK_DEFAULT_REGION,
-  },
+  env: accountEnv,
 });
 
 const securityStack = new SecurityStack(app, "SecurityStack", {
   vpc: vpc.vpc,
   stackName: "security-stack",
   stage,
-  env: {
-    account: env.CDK_DEFAULT_ACCOUNT,
-    region: env.CDK_DEFAULT_REGION,
-  },
+  env: accountEnv,
   whitelistedIps: [localIp],
 });
 
@@ -53,10 +53,7 @@ const bastion = new BastionStack(app, "BastionStack", {
   vpc: vpc.vpc,
   stackName: "bastion-stack",
   stage,
-  env: {
-    account: env.CDK_DEFAULT_ACCOUNT,
-    region: env.CDK_DEFAULT_REGION,
-  },
+  env: accountEnv,
 });
 
 const rds = new DatabaseStack(app, "DatabaseStack", {
@@ -67,10 +64,13 @@ const rds = new DatabaseStack(app, "DatabaseStack", {
   ],
   vpc: vpc.vpc,
   stackName: "database-stack",
-  env: {
-    account: env.CDK_DEFAULT_ACCOUNT,
-    region: env.CDK_DEFAULT_REGION,
-  },
+  env: accountEnv,
+});
+
+const secrets = new SecretsStack(app, "SecretsStack", {
+  stage,
+  stackName: "secrets-stack",
+  env: accountEnv,
 });
 
 const internalLambda = new InternalLambdaStack(app, "InternalLambdaStack", {
@@ -78,8 +78,6 @@ const internalLambda = new InternalLambdaStack(app, "InternalLambdaStack", {
   vpc: vpc.vpc,
   stackName: "internal-lambda-stack",
   securityGroup: securityStack.internalLambdaSecurityGroup,
-  env: {
-    account: env.CDK_DEFAULT_ACCOUNT,
-    region: env.CDK_DEFAULT_REGION,
-  },
+  env: accountEnv,
+  secrets: secrets,
 });
