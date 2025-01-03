@@ -7,7 +7,7 @@ interface ModelOptions {
   maxTokens?: number;
 }
 
-export class GroqApi {
+export class GroqService {
   private groq!: Groq;
   private messageHistory!: ChatCompletionMessageParam[];
 
