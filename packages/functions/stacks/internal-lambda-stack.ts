@@ -87,5 +87,33 @@ export class InternalLambdaStack extends cdk.Stack {
         cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMReadOnlyAccess"),
       ],
     });
+
+    new NodeLambdaConstruct(this, "ParseRedditPost", {
+      entry: path.resolve(__dirname, "../src/functions/internal/parse/parse-post.ts"),
+      env: {
+        NODE_ENV: props.stage,
+        ...dbConfig,
+      },
+      layers: [parametersAndSecretsExtension],
+      functionName: "parse-keyboard-post",
+      securityGroup: props.securityGroup,
+      // @ts-expect-error aws lib error
+      vpc: props.vpc,
+      policies: [
+        new cdk.aws_iam.PolicyStatement({
+          actions: [
+            "secretsmanager:GetResourcePolicy",
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:ListSecretVersionIds",
+          ],
+          effect: Effect.ALLOW,
+          resources: [props.secrets.groqCredentialSecret.secretArn],
+        }),
+      ],
+      managedPolicies: [
+        cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMReadOnlyAccess"),
+      ],
+    });
   }
 }
