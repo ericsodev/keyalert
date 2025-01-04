@@ -119,12 +119,17 @@ export class InternalLambdaStack extends cdk.Stack {
           effect: Effect.ALLOW,
           resources: [props.secrets.redditCredentialSecret.secretArn],
         }),
+        new cdk.aws_iam.PolicyStatement({
+          actions: ["sqs:sendmessage"],
+          effect: Effect.ALLOW,
+          resources: [this.redditIngestSQS.attrArn],
+        }),
       ],
       env: {
         NODE_ENV: props.stage,
         ...dbConfig,
         ...accountEnv,
-        INGEST_QUEUE_ARN: this.redditIngestSQS.attrArn,
+        INGEST_QUEUE_NAME: this.redditIngestSQS.queueName ?? "",
       },
     });
 
