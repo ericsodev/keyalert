@@ -19,6 +19,11 @@ export class InternalLambdaStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
+    const accountEnv = {
+      AWS_ACCOUNT_ID: props.env?.account ?? "",
+      AWS_ACCOUNT_REGION: props.env?.region ?? "",
+    };
+
     this.redditIngestSQS = new sqs.CfnQueue(this, "RedditIngestSQS", {
       queueName: "reddit-ingest-sqs",
     });
@@ -58,6 +63,7 @@ export class InternalLambdaStack extends cdk.Stack {
       env: {
         NODE_ENV: props.stage,
         ...dbConfig,
+        ...accountEnv,
       },
       layers: [parametersAndSecretsExtension],
       functionName: "db-heartbeat",
@@ -71,6 +77,7 @@ export class InternalLambdaStack extends cdk.Stack {
       env: {
         NODE_ENV: props.stage,
         ...dbConfig,
+        ...accountEnv,
       },
       layers: [parametersAndSecretsExtension],
       functionName: "reddit-ingest-manual",
@@ -116,18 +123,20 @@ export class InternalLambdaStack extends cdk.Stack {
       env: {
         NODE_ENV: props.stage,
         ...dbConfig,
+        ...accountEnv,
         INGEST_QUEUE_ARN: this.redditIngestSQS.attrArn,
       },
     });
 
     new NodeLambdaConstruct(this, "ParseRedditPost", {
-      entry: path.resolve(__dirname, "../src/functions/internal/parse/parse-post.ts"),
+      entry: path.resolve(__dirname, "../src/functions/internal/parse/parse-reddit-post.ts"),
       env: {
         NODE_ENV: props.stage,
         ...dbConfig,
+        ...accountEnv,
       },
       layers: [parametersAndSecretsExtension],
-      functionName: "parse-keyboard-post",
+      functionName: "parse-reddit-post",
       securityGroup: props.securityGroup,
       // @ts-expect-error aws lib error
       vpc: props.vpc,
