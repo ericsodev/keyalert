@@ -1,4 +1,5 @@
 import * as cdk from "aws-cdk-lib";
+import * as sqs from "aws-cdk-lib/aws-sqs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import * as path from "path";
@@ -14,8 +15,13 @@ interface Props extends cdk.StackProps {
 }
 
 export class InternalLambdaStack extends cdk.Stack {
+  public redditIngestSQS!: sqs.CfnQueue;
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
+
+    this.redditIngestSQS = new sqs.CfnQueue(this, "RedditIngestSQS", {
+      queueName: "reddit-ingest-sqs",
+    });
 
     const parametersAndSecretsExtension = lambda.LayerVersion.fromLayerVersionArn(
       this,
@@ -86,6 +92,32 @@ export class InternalLambdaStack extends cdk.Stack {
       managedPolicies: [
         cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMReadOnlyAccess"),
       ],
+    });
+
+    new NodeLambdaConstruct(this, "RedditIngestCron", {
+      entry: path.resolve(__dirname, "../src/functions/internal/ingest/reddit-ingest-cron.ts"),
+      functionName: "reddit-ingest-cron",
+      securityGroup: props.securityGroup,
+      // @ts-expect-error aws lib error
+      vpc: props.vpc,
+      layers: [parametersAndSecretsExtension],
+      policies: [
+        new cdk.aws_iam.PolicyStatement({
+          actions: [
+            "secretsmanager:GetResourcePolicy",
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:ListSecretVersionIds",
+          ],
+          effect: Effect.ALLOW,
+          resources: [props.secrets.redditCredentialSecret.secretArn],
+        }),
+      ],
+      env: {
+        NODE_ENV: props.stage,
+        ...dbConfig,
+        INGEST_QUEUE_ARN: this.redditIngestSQS.attrArn,
+      },
     });
 
     new NodeLambdaConstruct(this, "ParseRedditPost", {
